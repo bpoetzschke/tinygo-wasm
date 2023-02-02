@@ -8,22 +8,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="wasm_exec.js"></script>
     <script src="wasm.js"></script>
+    <style>
+        body,pre { margin:0;padding:0; }
+        #my-canvas {
+            position:fixed;
+            opacity:1.0;
+            width: 100%;
+            height:100%;
+            top:0;right:0;bottom:0;left:0;
+            border: 1px solid black;
+        }
+        #settings {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 150px;
+            height: 20px;
+        }
+    </style>
 </head>
 
 <body>
-<h1>WebAssembly</h1>
-<p>Add two numbers, using WebAssembly calling an add() method written in Go:</p>
-<input type="number" id="a" value="2" /> + <input type="number" id="b" value="2" /> = <input type="number" id="result"/>
-<button>Calculate</button>
+<canvas id="my-canvas"></canvas>
+<div id="settings">
+    <input type="checkbox" name="tracing" id="tracing" onchange="tracingBoxChanged(this)" /><label for="tracing">Enable traces</label>
+    <input type="number" min="1", max="10" name="speed" id="speed" onchange="speedChanged(this)" /><label for="speed">Speed</label>
+</div>
 <script>
-    const button = document.querySelector('button');
-    button.addEventListener('click', event => {
-        var a = parseInt(document.getElementById("a").value);
-        var b = parseInt(document.getElementById("b").value);
-        var res = wasm.exports.add(a, b);
-        var sum_box = document.getElementById("result");
-        sum_box.value = res;
-    });
+    window.addEventListener('load', function () {
+        wasm.exports.start();
+    }, false);
+
+    function tracingBoxChanged(e) {
+        wasm.exports.toggleTracing(e.checked);
+    }
+
+    function speedChanged(e) {
+        wasm.exports.speedChanged(e.value);
+    }
+
+    // Render one frame of the animation
+    function renderFrame() {
+        wasm.exports.renderFrame();
+    }
 </script>
 </body>
 
