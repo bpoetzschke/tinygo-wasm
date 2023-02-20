@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Go WebAssembly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="wasm_exec.js"></script>
+    <script src="add_wasm.js"></script>
+</head>
+
+<body>
+    <input type="number" name="a" id="a"/><label for="a">A</label>
+    <input type="number" name="b" id="b"/><label for="b">B</label>
+    <button type="button" onclick="add()">Add</button>
+
+    <script>
+        function add() {
+            const a = document.getElementById("a").value
+            const b = document.getElementById("b").value
+            const result = wasm.exports.add(a, b)
+            alert(result)
+        }
+    </script>
+</body>
+
+</html>
